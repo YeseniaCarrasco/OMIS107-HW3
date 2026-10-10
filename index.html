@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Guess</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 60px auto;
+      text-align: center;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 8px;
+    }
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Number Guess</h1>
+  <p>I'm thinking of a number from 1 to 100.</p>
+  <input type="number" id="guess" min="1" max="100">
+  <button onclick="checkGuess()">Guess</button>
+  <p id="message"></p>
+  <p>Guesses: <span id="count">0</span></p>
+  <button onclick="newGame()">New game</button>
+
+  <script>
+    let secret = Math.floor(Math.random() * 100) + 1;
+    let count = 0;
+
+    function checkGuess() {
+      const input = document.getElementById("guess");
+      const guess = Number(input.value);
+      const message = document.getElementById("message");
+
+      if (!guess || guess < 1 || guess > 100) {
+        message.textContent = "Enter a number from 1 to 100.";
+        return;
+      }
+
+      count++;
+      document.getElementById("count").textContent = count;
+
+      if (guess === secret) {
+        message.textContent = "You got it in " + count + " guesses!";
+      } else if (guess < secret) {
+        message.textContent = "Too low.";
+      } else {
+        message.textContent = "Too high.";
+      }
+    }
+
+    function newGame() {
+      secret = Math.floor(Math.random() * 100) + 1;
+      count = 0;
+      document.getElementById("count").textContent = 0;
+      document.getElementById("message").textContent = "";
+      document.getElementById("guess").value = "";
+    }
+  </script>
+</body>
+</html>
