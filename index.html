@@ -54,6 +54,16 @@
   <script>
     let secret = Math.floor(Math.random() * 100) + 1;
     let count = 0;
+     
+    function proximityHint(guess) {
+      const diff = Math.abs(guess - secret);
+
+      if (diff <= 5)  return "Burning hot!";
+      if (diff <= 10) return "Hot.";
+      if (diff <= 20) return "Warm.";
+      if (diff <= 40) return "Cold.";
+      return "Freezing!";
+    } 
 
     function checkGuess() {
       const input = document.getElementById("guess");
@@ -71,9 +81,9 @@
       if (guess === secret) {
         message.textContent = "You got it in " + count + " guesses!";
       } else if (guess < secret) {
-        message.textContent = "Too low.";
+        message.textContent = "Too low. " + proximityHint(guess);
       } else {
-        message.textContent = "Too high.";
+        message.textContent = "Too high. " + proximityHint(guess);
       }
     }
 
