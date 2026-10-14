@@ -34,6 +34,13 @@
     button:hover {
       background-color: #6d28d9;
     }
+    .reveal-button {
+      background-color: #2563eb;
+      border-color: #1d4ed8;
+    }
+    .reveal-button:hover {
+      background-color: #1d4ed8;
+    }
     #message {
       margin-top: 20px;
       font-size: 20px;
@@ -46,7 +53,8 @@
   <h1>Number Guess</h1>
   <p>I'm thinking of a number from 1 to 100.</p>
   <input type="number" id="guess" min="1" max="100">
-  <button onclick="checkGuess()">Guess</button>
+  <button id="guessButton" onclick="checkGuess()">Guess</button>
+  <button class="reveal-button" onclick="revealNumber()">Reveal</button>
   <p id="message"></p>
   <p>Guesses: <span id="count">0</span></p>
   <button onclick="newGame()">New game</button>
@@ -64,8 +72,13 @@
       if (diff <= 40) return "Cold.";
       return "Freezing!";
     } 
+    let gameActive = true;
 
     function checkGuess() {
+      if (!gameActive) {
+        return;
+      }
+
       const input = document.getElementById("guess");
       const guess = Number(input.value);
       const message = document.getElementById("message");
@@ -87,12 +100,26 @@
       }
     }
 
+    function revealNumber() {
+      if (!gameActive) {
+        return;
+      }
+
+      gameActive = false;
+      document.getElementById("guess").disabled = true;
+      document.getElementById("guessButton").disabled = true;
+      document.getElementById("message").textContent = "The number was " + secret + ". Start a new game.";
+    }
+
     function newGame() {
       secret = Math.floor(Math.random() * 100) + 1;
       count = 0;
+      gameActive = true;
       document.getElementById("count").textContent = 0;
       document.getElementById("message").textContent = "";
       document.getElementById("guess").value = "";
+      document.getElementById("guess").disabled = false;
+      document.getElementById("guessButton").disabled = false;
     }
   </script>
 </body>
