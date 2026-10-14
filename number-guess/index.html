@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Guess</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 60px auto;
+      text-align: center;
+      background-color: #f3e8ff;
+      color: #3b0764;
+    }
+    h1 {
+      color: #6d28d9;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 8px;
+      border: 2px solid #8b5cf6;
+      border-radius: 6px;
+    }
+    input {
+      background-color: #ffffff;
+      color: #3b0764;
+    }
+    button {
+      background-color: #7c3aed;
+      color: #ffffff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #6d28d9;
+    }
+    button:disabled {
+      background-color: #c4b5fd;
+      cursor: not-allowed;
+    }
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      min-height: 30px;
+      color: #5b21b6;
+    }
+  </style>
+</head>
+<body>
+  <h1>Number Guess</h1>
+  <p>I'm thinking of a number from 1 to 100. You have 10 guesses.</p>
+  <input type="number" id="guess" min="1" max="100">
+  <button id="guessBtn" onclick="checkGuess()">Guess</button>
+  <p id="message"></p>
+  <p>Guesses: <span id="count">0</span> / <span id="max">10</span></p>
+  <button onclick="newGame()">New game</button>
+
+  <script>
+    const MAX_GUESSES = 10;
+    let secret = Math.floor(Math.random() * 100) + 1;
+    let count = 0;
+    let gameOver = false;
+
+    function endGame() {
+      gameOver = true;
+      document.getElementById("guess").disabled = true;
+      document.getElementById("guessBtn").disabled = true;
+    }
+
+    function checkGuess() {
+      if (gameOver) return;
+
+      const input = document.getElementById("guess");
+      const guess = Number(input.value);
+      const message = document.getElementById("message");
+
+      if (!guess || guess < 1 || guess > 100) {
+        message.textContent = "Enter a number from 1 to 100.";
+        return;
+      }
+
+      count++;
+      document.getElementById("count").textContent = count;
+
+      if (guess === secret) {
+        message.textContent = "You got it in " + count + " guesses!";
+        endGame();
+      } else if (count >= MAX_GUESSES) {
+        message.textContent = "Out of guesses! The number was " + secret + ".";
+        endGame();
+      } else if (guess < secret) {
+        message.textContent = "Too low. " + (MAX_GUESSES - count) + " left.";
+      } else {
+        message.textContent = "Too high. " + (MAX_GUESSES - count) + " left.";
+      }
+
+      input.value = "";
+      if (!gameOver) input.focus();
+    }
+
+    function newGame() {
+      secret = Math.floor(Math.random() * 100) + 1;
+      count = 0;
+      gameOver = false;
+      document.getElementById("count").textContent = 0;
+      document.getElementById("message").textContent = "";
+      const input = document.getElementById("guess");
+      input.value = "";
+      input.disabled = false;
+      document.getElementById("guessBtn").disabled = false;
+      input.focus();
+    }
+  </script>
+</body>
+</html>
